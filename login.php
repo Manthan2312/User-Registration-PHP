@@ -5,21 +5,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
   $password = htmlspecialchars($_POST['pass']);
 
-  // Database credentials
+  
   $servername = "localhost";
   $username = "root";
   $dbpassword = "";
   $database = "manthan";
 
-  // Create connection
+  
   $conn = new mysqli($servername, $username, $dbpassword, $database);
 
-  // Check connection
+ 
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
   }
 
-  // Prepare and bind
+  
   $stmt = $conn->prepare("SELECT Password FROM user WHERE Email = ?");
   $stmt->bind_param("s", $email);
   $stmt->execute();
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>';
   }
 
-  // Close connections
+  
   $stmt->close();
   $conn->close();
 }
