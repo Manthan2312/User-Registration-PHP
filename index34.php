@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <span aria-hidden="true">&times;</span>
     </button>
   </div>';
-    exit; // Stop further execution
+    exit;
   }
 
   if ($password !== $confirmPassword) {
