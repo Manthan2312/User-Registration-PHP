@@ -4,7 +4,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $password = htmlspecialchars($_POST['pass']);
   $confirmPassword = htmlspecialchars($_POST['confirm_pass']);
 
-  // Email validation
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong>Error!</strong> Invalid email format.
@@ -12,10 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <span aria-hidden="true">&times;</span>
     </button>
   </div>';
-    exit; // Stop further execution
-  }
-
-  // Password conditions: at least 8 characters, one uppercase, one lowercase, one digit, one special character
+    exit;
+  }
   $passwordPattern = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/";
   if (!preg_match($passwordPattern, $password)) {
     echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -27,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit; // Stop further execution
   }
 
-  // Check if passwords match
   if ($password !== $confirmPassword) {
     echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
     <strong>Error!</strong> Passwords do not match.
@@ -35,24 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <span aria-hidden="true">&times;</span>
     </button>
   </div>';
-    exit; // Stop further execution
+    exit;
   }
 
-  // Database credentials
+  
   $servername = "localhost";
   $username = "root";
   $dbpassword = "";
   $database = "manthan";
 
-  // Create connection
+ 
   $conn = new mysqli($servername, $username, $dbpassword, $database);
 
-  // Check connection
+
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
   }
-
-  // Check if the email already exists
+
   $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
   $stmt->bind_param("s", $email);
   $stmt->execute();
@@ -67,10 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>';
     $stmt->close();
     $conn->close();
-    exit; // Stop further execution
+    exit; 
   }
   
-  // Prepare and bind
+ 
   $stmt = $conn->prepare("INSERT INTO user (Email, Password) VALUES (?, ?)");
   $stmt->bind_param("ss", $email, $password);
 
@@ -82,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </button>
   </div>';
     header("Location: login.php");
-    exit(); // Ensure no further code is executed
+    exit(); 
   } else {
     echo '<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
     <strong>Error!</strong> There was a problem submitting your information.
@@ -92,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>';
   }
 
-  // Close connections
+ 
   $stmt->close();
   $conn->close();
 }
